@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.english.model.Log;
+import com.example.english.model.User;
 import com.example.english.service.LogService;
 
 @RestController
@@ -28,19 +28,24 @@ public class LogController {
     //     return logService.findLog(id);
     // }
     
-    @PostMapping("/logs/{id}")
-    public Log addLogWithId(@PathVariable int id, @RequestBody Log log) {
-        return logService.addLogWithId(id, log);
-    }
-
-    // @PutMapping("/logs/{id}")
-    // public void updateLog(@PathVariable("id") int id, @RequestBody Log log) {
-    //     log.setLogId(id);
-    //     logService.updateLog(log);
+    // @PostMapping("/logs/{id}")
+    // public Log addLogWithId(@PathVariable int id, @RequestBody Log log) {
+    //     return logService.addLogWithId(id, log);
     // }
+
+    @PutMapping("/logs/{log_id}/users/{user_id}")
+    public Log assignUserToLog(@PathVariable("log_id") int log_id, @PathVariable("user_id") int user_id) {
+        return logService.assignUserToLog(log_id, user_id);
+    }
 
     // @DeleteMapping("/logs/{id}")
     // public void deleteLog(@PathVariable int id) {
     //     logService.deleteLog(id);
     // }
+
+    @GetMapping("/logs/{id}/users")
+    public User findUserOfLog(@PathVariable int id) {
+        return logService.findUserOfLog(id);
+    }
+
 }

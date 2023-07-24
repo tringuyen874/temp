@@ -2,14 +2,19 @@ package com.example.english.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "result")
 public class Result {
     @Id
@@ -23,8 +28,7 @@ public class Result {
     @Column(name = "ex_id")
     int examId;
 
-    @Column(name = "wd_id")
-    int wordId;
+    
 
     @Column(name = "rs_score")
     int resultScore;
@@ -38,6 +42,14 @@ public class Result {
     @Column(name = "rs_type")
     int resultType;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "wd_id", referencedColumnName = "wd_id")
+    private Word word;
+
+    public void assignWord(Word wordToAssign) {
+        this.word = wordToAssign;
+    }
+
     public int getResultId() {
         return resultId;
     }
@@ -50,9 +62,7 @@ public class Result {
         return examId;
     }
 
-    public int getWordId() {
-        return wordId;
-    }
+   
 
     public int getResultScore() {
         return resultScore;
@@ -78,9 +88,7 @@ public class Result {
         this.examId = examId;
     }
 
-    public void setWordId(int wordId) {
-        this.wordId = wordId;
-    }
+   
 
     public void setResultScore(int resultScore) {
         this.resultScore = resultScore;
@@ -100,19 +108,18 @@ public class Result {
 
     @Override
     public String toString() {
-        return "Result [resultId=" + resultId + ", userId=" + userId + ", examId=" + examId + ", wordId=" + wordId
-                + ", resultScore=" + resultScore + ", resultDatetime=" + resultDatetime + ", resultFlag=" + resultFlag
-                + ", resultType=" + resultType + "]";
+        return "Result [resultId=" + resultId + ", userId=" + userId + ", examId=" + examId + 
+         ", resultScore=" + resultScore + ", resultDatetime=" + resultDatetime + ", resultFlag=" + resultFlag
+        + ", resultType=" + resultType + "]";
     }
 
     public Result() {
     }
 
-    public Result(int userId, int examId, int wordId, int resultScore, LocalDateTime resultDatetime, int resultFlag,
+    public Result(int userId, int examId, int resultScore, LocalDateTime resultDatetime, int resultFlag,
             int resultType) {
         this.userId = userId;
         this.examId = examId;
-        this.wordId = wordId;
         this.resultScore = resultScore;
         this.resultDatetime = resultDatetime;
         this.resultFlag = resultFlag;

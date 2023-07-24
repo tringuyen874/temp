@@ -42,11 +42,17 @@ public class LogService {
         return logRepository.findAll();
     }
 
-    public Log addLogWithId(int user_id, Log log) {
+    public Log assignUserToLog(int log_id, int user_id) {
+        Log log = logRepository.findById(log_id).orElse(null);
         User user = userRepository.findById(user_id).orElse(null);
-        log.setUserId(user_id);
-        // log.setUser(user);
+        log.assignUser(user);
         return logRepository.save(log);
+    }
+
+    public User findUserOfLog(int log_id) {
+        Log log = logRepository.findById(log_id).orElse(null);
+        User user = log.getUser();
+        return user;
     }
     
 }

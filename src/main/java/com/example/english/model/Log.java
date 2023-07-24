@@ -2,11 +2,14 @@ package com.example.english.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.transaction.Transactional;
 import lombok.Data;
@@ -21,8 +24,7 @@ public class Log {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int logId;
     
-    @Column(name = "us_id")
-    int userId;
+    
 
     @Column(name = "log_action")
     String logAction;
@@ -37,9 +39,7 @@ public class Log {
         return logId;
     }
 
-    public int getUserId() {
-        return userId;
-    }
+    
 
     public String getLogAction() {
         return logAction;
@@ -57,9 +57,7 @@ public class Log {
         this.logId = logId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+    
 
     public void setLogAction(String logAction) {
         this.logAction = logAction;
@@ -75,15 +73,14 @@ public class Log {
 
     @Override
     public String toString() {
-        return "Log [logId=" + logId + ", userId=" + userId + ", logAction=" + logAction + ", logDatetime="
+        return "Log [logId=" + logId +  ", logAction=" + logAction + ", logDatetime="
                 + logDatetime + ", logStatus=" + logStatus + "]";
     }
 
     public Log() {
     }
 
-    public Log(int userId, String logAction, LocalDateTime logDatetime, int logStatus) {
-        this.userId = userId;
+    public Log(String logAction, LocalDateTime logDatetime, int logStatus) {
         this.logAction = logAction;
         this.logDatetime = logDatetime;
         this.logStatus = logStatus;
@@ -91,5 +88,11 @@ public class Log {
 
     // @ManyToOne
     // @JoinColumn(name = "user_id")
-    // private User user;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "us_id", referencedColumnName = "us_id")
+    private User user;
+
+    public void assignUser(User userToAssign) {
+        this.user = userToAssign;
+    }
 }

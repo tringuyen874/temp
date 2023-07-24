@@ -1,23 +1,22 @@
 package com.example.english.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.transaction.Transactional;
 import lombok.Data;
 
-@Entity
 @Transactional
+@Entity
 @Data
 @Table(name = "user")
 public class User {
@@ -50,6 +49,9 @@ public class User {
 
     @Column(name = "us_status")
     int status;
+
+    @Column(name = "us_enabled")
+    Boolean enabled = false;
 
     @Column(name = "us_created_date", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
     LocalDateTime  createdDate;
@@ -141,7 +143,7 @@ public class User {
     }
 
     public User(String username, String password, String fullname, String email, String phone, String address,
-            int groupId, int status, LocalDateTime createdDate) {
+            int groupId, int status) {
         this.username = username;
         this.password = password;
         this.fullname = fullname;
@@ -150,18 +152,18 @@ public class User {
         this.address = address;
         this.groupId = groupId;
         this.status = status;
-        this.createdDate = createdDate;
     }
 
     public void setId(int id) {
         this.userId = id;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "us_id")
-    private List<Log> logs;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    // @JoinColumn(name = "user_id", referencedColumnName = "us_id")
+    private Set<Log> logs ;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "us_id")
-    private List<Result> results;
+    // @OneToMany(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "user_id", referencedColumnName = "us_id")
+    // private List<Result> results;
 }
